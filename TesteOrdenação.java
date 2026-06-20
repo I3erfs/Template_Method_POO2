@@ -1,40 +1,46 @@
-import java.util.Arrays;
 import java.util.Comparator;
 
-//Comparador 1 (Última letra)
-class ComparaUltimaLetra implements Comparator<String> {
-    @Override
-    public int compare(String s1, String s2) {
-        char ultimaLetraS1 = s1.charAt(s1.length() - 1);
-        char ultimaLetraS2 = s2.charAt(s2.length() - 1);
-        return Character.compare(ultimaLetraS1, ultimaLetraS2);
-    }
-}
-
-// Comparador 2 (Tamanho da palavra)
-class ComparaTamanho implements Comparator<String> {
-    @Override
-    public int compare(String s1, String s2) {
-        // Integer.compare é a forma mais segura de comparar dois números inteiros em Java
-        return Integer.compare(s1.length(), s2.length());
-    }
-}
-
 public class TesteOrdenacao {
-    public static void main(String[] args) {
-        String[] palavras = {"java", "proxy", "singleton", "interface", "factory"};
-        
-        System.out.println("--- Array original ---");
-        System.out.println(Arrays.toString(palavras));
-        
-        // Testando a ordenação pela última letra
-        Arrays.sort(palavras, new ComparaUltimaLetra());
-        System.out.println("\n--- Ordenado pela última letra ---");
-        System.out.println(Arrays.toString(palavras));
 
-        // Testando a NOVA ordenação por tamanho
-        Arrays.sort(palavras, new ComparaTamanho());
-        System.out.println("\n--- Ordenado por tamanho (do menor para o maior) ---");
-        System.out.println(Arrays.toString(palavras));
+    public static abstract class ComparadorTemplate implements Comparator<String> {
+        @Override
+        public final int compare(String p1, String p2) {
+            // Passo 1: Tratamento padronizado contra valores nulos
+            if (p1 == null && p2 == null) return 0;
+            if (p1 == null) return 1;  // Joga strings nulas para o final
+            if (p2 == null) return -1;
+
+            return compararDetalhe(p1, p2);
+        }
+
+        protected abstract int compararDetalhe(String p1, String p2);
+    }
+
+    /**
+    *Ordenação baseada na última letra da palavra.
+     */
+    public static class ComparadorPorUltimaLetra extends ComparadorTemplate {
+        @Override
+        protected int compararDetalhe(String p1, String p2) {
+            // Tratamento para strings vazias ""
+            if (p1.isEmpty() && p2.isEmpty()) return 0;
+            if (p1.isEmpty()) return -1;
+            if (p2.isEmpty()) return 1;
+
+            char ultimaLetra1 = p1.charAt(p1.length() - 1);
+            char ultimaLetra2 = p2.charAt(p2.length() - 1);
+
+            return Character.compare(ultimaLetra1, ultimaLetra2);
+        }
+    }
+
+    /**
+     *Ordenação baseada no tamanho (comprimento) da palavra.
+     */
+    public static class ComparadorPorTamanho extends ComparadorTemplate {
+        @Override
+        protected int compararDetalhe(String p1, String p2) {
+            return Integer.compare(p1.length(), p2.length());
+        }
     }
 }
