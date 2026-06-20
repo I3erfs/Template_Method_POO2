@@ -2,31 +2,25 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        // Array com nomes de bandas de rock
         String[] bandas = {
-            "Metallica", 
-            "Queen", 
-            "Aerosmith", 
-            "Muse", 
-            "Scorpions", 
-            "Rush"
+            "Metallica", "Queen", "LedZeppelin", "AC/DC", "Nirvana", "The Who", "Rush", "", null, "U2"
         };
 
-        System.out.println("TESTE DE ORDENAÇÃO SEPARADO EM ARQUIVOS");
-        System.out.println("Array original:");
-        System.out.println(Arrays.toString(bandas));
-        
-        
-        // Ordenação pela última letra
-        Arrays.sort(bandas, new ComparaUltimaLetra());
-        System.out.println("[1] Ordenado pela ÚLTIMA LETRA:");
+        System.out.println("Array Original");
         System.out.println(Arrays.toString(bandas));
 
-        System.out.println("\n");
+        // Clonando os arrays para que cada teste use a versão original desordenada
+        String[] bandasPorTamanho = bandas.clone();
+        String[] bandasPorUltimaLetra = bandas.clone();
 
-        // Ordenação pelo tamanho
-        Arrays.sort(bandas, new ComparaTamanho());
-        System.out.println("[2] Ordenado por TAMANHO (Menor para o Maior):");
-        System.out.println(Arrays.toString(bandas));
+        // Ordenação pelo Tamanho
+        Arrays.sort(bandasPorTamanho, new TesteOrdenacao.ComparadorPorTamanho());
+        System.out.println("\n Ordenado por Tamanho do Nome ");
+        System.out.println(Arrays.toString(bandasPorTamanho));
+
+        // Ordenação pela Última Letra
+        Arrays.sort(bandasPorUltimaLetra, new TesteOrdenacao.ComparadorPorUltimaLetra());
+        System.out.println("\n Ordenado pela Última Letra ");
+        System.out.println(Arrays.toString(bandasPorUltimaLetra));
     }
 }
